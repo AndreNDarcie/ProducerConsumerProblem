@@ -7,7 +7,7 @@ package producerconsumerproblem;
 
 /**
  *
- * @author admin
+ * @author Andre N. Darcie , Alex Benevides.
  */
 public class ProducerConsumerProblem {
 
