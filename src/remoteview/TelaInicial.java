@@ -35,6 +35,8 @@ public class TelaInicial extends javax.swing.JFrame {
         }
         
         initComponents();
+        
+        intervaloTempo = Integer.parseInt(jTextField2.getText());
     }
 
     @SuppressWarnings("unchecked")
@@ -187,7 +189,8 @@ public class TelaInicial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        new Thread(threadServidor).start();
+        Servidor servidor = new Servidor(Integer.parseInt(jTextField2.getText()));
+        new Thread(servidor).start();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -209,38 +212,6 @@ public class TelaInicial extends javax.swing.JFrame {
         intervaloTempo = Integer.parseInt(jTextField2.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
  
-    private Runnable threadServidor = new Runnable() { 
-        @Override
-        public void run() {
-            try{
-                intervaloTempo = Integer.parseInt(jTextField2.getText());
-                
-                ServerSocket servidor = new ServerSocket();
-                servidor.bind(new InetSocketAddress("0.0.0.0", 9000));
-                System.out.println("Server Online!");
-                
-                try {
-                    while(true)
-                    {
-                        Socket cliente = servidor.accept();
-
-                        ThreadTrataCliente ttc = new ThreadTrataCliente(cliente);
-                        Thread t = new Thread(ttc);
-                        t.start();
-                    }
-                } catch (Exception e) {
-                    e.getMessage();
-                }
-                
-                servidor.close();
-                System.out.println("Servidor finalizado!");
-                
-            }catch (Exception e) {
-                System.err.println("Erro no Servidor!");
-            }
-        }
-    };
-    
     private Runnable threadCliente = new Runnable() { 
         @Override
         public void run() {
@@ -248,7 +219,7 @@ public class TelaInicial extends javax.swing.JFrame {
                 Socket cliente = new Socket("127.0.0.1", 9000);
                 ObjectInputStream in = new ObjectInputStream(cliente.getInputStream());
                 byte[] buffer = new byte[2000000];
-                ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+                //ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 ImageIcon imageIcon;
                 
                 while(true) {

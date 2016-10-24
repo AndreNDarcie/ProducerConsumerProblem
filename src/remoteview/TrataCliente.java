@@ -9,11 +9,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.imageio.ImageIO;
 
-public class ThreadTrataCliente implements Runnable {
+public class TrataCliente implements Runnable {
 
     private Socket cliente;
     
-    public ThreadTrataCliente(Socket cliente) {
+    public TrataCliente(Socket cliente) {
         this.cliente = cliente;
     }
     
