@@ -5,11 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import static remoteview.TelaInicial.intervaloTempo;
 
-public class Servidor implements Runnable{ // Produtor
-
-    private int autorizaProducao = 0;  
-    private int copiaTerminaConsumir = 0;
-    private int tamanhoLista = 0;
+public class Servidor implements Runnable{
     
     private int intervaloTempo;
     
@@ -44,21 +40,4 @@ public class Servidor implements Runnable{ // Produtor
                 System.err.println("Erro no Servidor!");
             }
     }
-    
-    public void Produz(){
-        if (autorizaProducao - copiaTerminaConsumir < tamanhoLista){
-            autorizaProducao = autorizaProducao + 1;
-            enviaObjeto();
-        }
-    }
-    
-    public void recebeImcremento(){
-        copiaTerminaConsumir = copiaTerminaConsumir + 1;
-    }
-    
-    // TODO: fazer o envio
-    public void enviaObjeto(){
-        
-    }
-    
 }

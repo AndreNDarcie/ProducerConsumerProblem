@@ -15,7 +15,11 @@ import javax.swing.ImageIcon;
  * @author admin
  */
 public class Cliente implements Runnable{
-
+    
+    //Lista de imagens: lista
+    private int autorizaConsumir = 0;
+    private int terminaProducao = 0;
+    
     @Override
     public void run() {
         try {
@@ -36,6 +40,21 @@ public class Cliente implements Runnable{
             } catch (Exception e) {
                 System.err.println("Erro ao receber imagem!");
             }
+    }
+    
+    public void Consome(){ // Recebe a imagem por parametro
+        if (autorizaConsumir - terminaProducao < 0){
+            autorizaConsumir = autorizaConsumir + 1;
+            
+            // Pega imagem da lista e exibe na tela
+            
+            // Envia mensagem de incremento para servidor
+        }
+    }
+    
+    public void recebeObjeto(){ // Recebe a mensagem
+        // Coloca a imagem na lista
+        terminaProducao = terminaProducao + 1;
     }
     
 }
