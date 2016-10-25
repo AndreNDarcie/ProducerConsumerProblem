@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -194,7 +195,8 @@ public class TelaInicial extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new Thread(threadCliente).start();
+        Cliente cliente = new Cliente();
+        new Thread(cliente).start();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -211,30 +213,10 @@ public class TelaInicial extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         intervaloTempo = Integer.parseInt(jTextField2.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
- 
-    private Runnable threadCliente = new Runnable() { 
-        @Override
-        public void run() {
-            try {
-                Socket cliente = new Socket("127.0.0.1", 9000);
-                ObjectInputStream in = new ObjectInputStream(cliente.getInputStream());
-                byte[] buffer = new byte[2000000];
-                //ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
-                ImageIcon imageIcon;
-                
-                while(true) {
-                    buffer = (byte[]) in.readObject();
-                    
-                    //System.out.println("Cliente recebeu: " + buffer);
-                    imageIcon = new ImageIcon(new ImageIcon(buffer).getImage().getScaledInstance(745, 385, Image.SCALE_SMOOTH));
-                    jLabel2.setIcon(imageIcon);
-                }
-                
-            } catch (Exception e) {
-                System.err.println("Erro ao receber imagem!");  
-            }
-        } 
-    };
+  
+    public static void atualizaImagem(ImageIcon image){
+        jLabel2.setIcon(image);
+    }
     
     /**
      * @param args the command line arguments
@@ -277,7 +259,7 @@ public class TelaInicial extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    public static javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
