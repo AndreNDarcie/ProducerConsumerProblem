@@ -1,5 +1,6 @@
 package remoteview;
 
+import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -15,7 +16,9 @@ public class TrataCliente implements Runnable {
     
     private int autorizaProducao = 0;  
     private int copiaTerminaConsumir = 0;
-    private int tamanhoLista = 0;
+    private int tamanhoLista = 3;
+    
+    private ObjectOutputStream out;
     
     public TrataCliente(Socket cliente) {
         this.cliente = cliente;
@@ -23,38 +26,21 @@ public class TrataCliente implements Runnable {
     
     @Override
     public void run() {
-        
-        //String mensagem = "Envia imagem";
-        
         try{
-            ObjectOutputStream out = new ObjectOutputStream(cliente.getOutputStream());
-            ByteArrayOutputStream baos;
-            BufferedImage screenCapturedImage;
-            
-            while(true) {
-                baos = new ByteArrayOutputStream();
-                screenCapturedImage = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
-                ImageIO.write(screenCapturedImage, "png", baos);
-                
-                //System.out.println("Servidor enviou: " + baos.toByteArray());
-                out.writeObject(baos.toByteArray());
-                
-                out.flush();
-                baos.close();
-                
-                Thread.sleep(TelaInicial.intervaloTempo);
-            }
+            out = new ObjectOutputStream(cliente.getOutputStream());
+  
             
         } catch (Exception e){
-            System.err.println("Erro ao enviar imagem ao cliente: " + cliente.getInetAddress().getHostAddress());
+            System.err.println(e.getMessage());
         }
-        
     }
     
-    public void Produz(){ // Tira uma print da tela e envia
+    public void Produz() throws AWTException{ // Tira uma print da tela e envia
         if (autorizaProducao - copiaTerminaConsumir < tamanhoLista){
             autorizaProducao = autorizaProducao + 1;
-            enviaObjeto();
+            
+            BufferedImage screenCapturedImage = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
+            enviaObjeto(screenCapturedImage);
         }
     }
     
@@ -63,8 +49,20 @@ public class TrataCliente implements Runnable {
     }
     
     // TODO: fazer o envio
-    public void enviaObjeto(){ // Envia imagem
-        
+    public void enviaObjeto(BufferedImage screenCapturedImage){ // Envia imagem
+        try{
+            ByteArrayOutputStream baos;
+            baos = new ByteArrayOutputStream();
+            ImageIO.write(screenCapturedImage, "png", baos);
+
+            //System.out.println("Servidor enviou: " + baos.toByteArray());
+            out.writeObject(baos.toByteArray());
+
+            out.flush();
+            baos.close();
+        } catch(Exception e){
+            System.err.println("Erro ao enviar imagem ao cliente");
+        }
     }
     
 }
