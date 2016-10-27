@@ -6,6 +6,7 @@
 package remoteview;
 
 import java.awt.Image;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import javax.swing.ImageIcon;
@@ -14,7 +15,7 @@ import javax.swing.ImageIcon;
  *
  * @author admin
  */
-public class Cliente implements Runnable{
+public class Consumidor implements Runnable{
     
     //Lista de imagens: lista
     private int autorizaConsumir = 0;
@@ -32,13 +33,13 @@ public class Cliente implements Runnable{
                 while(true) {
                     buffer = (byte[]) in.readObject();
                     
-                    //System.out.println("Cliente recebeu: " + buffer);
+                    System.out.println("Consumidor recebeu imagem e guardou na lista");
                     imageIcon = new ImageIcon(new ImageIcon(buffer).getImage().getScaledInstance(745, 385, Image.SCALE_SMOOTH));
                     TelaInicial.atualizaImagem(imageIcon);
                 }
                 
-            } catch (Exception e) {
-                System.err.println("Erro ao receber imagem!");
+            } catch (IOException | ClassNotFoundException e) {
+                System.err.println("Erro ao receber imagem do Produtor!");
             }
     }
     

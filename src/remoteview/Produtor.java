@@ -1,6 +1,7 @@
 package remoteview;
 
 import java.awt.AWTException;
+import java.awt.HeadlessException;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -11,17 +12,16 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import javax.imageio.ImageIO;
-import static remoteview.TelaInicial.intervaloTempo;
 
-public class Servidor implements Runnable{
+public class Produtor implements Runnable{
     
     private int autorizaProducao = 0;  
     private int copiaTerminaConsumir = 0;
-    private int tamanhoLista = 3;
+    private final int tamanhoLista = 3;
     
     private ObjectOutputStream out;
     
-    public Servidor(){
+    public Produtor(){
         
     }
     
@@ -30,7 +30,7 @@ public class Servidor implements Runnable{
         try{
                 ServerSocket servidor = new ServerSocket();
                 servidor.bind(new InetSocketAddress("0.0.0.0", 9000));
-                System.out.println("Server Online!");
+                System.out.println("Produtor Iniciado!");
                 
                 try {
                     while(true)
@@ -44,31 +44,30 @@ public class Servidor implements Runnable{
                 }
                 
                 servidor.close();
-                System.out.println("Servidor finalizado!");
+                System.out.println("Produtor finalizado!");
                 
             }catch (Exception e) {
-                System.err.println("Erro no Servidor!");
+                System.err.println("Erro no Produtor!");
             }
     }
     
-        public void Produz(){ // Tira uma print da tela e envia
+    public void Produz(){ // Tira uma print da tela e envia
         if (autorizaProducao - copiaTerminaConsumir < tamanhoLista){
             autorizaProducao = autorizaProducao + 1;
             
             try{
                 BufferedImage screenCapturedImage = new Robot().createScreenCapture(new Rectangle(Toolkit.getDefaultToolkit().getScreenSize()));
                 enviaObjeto(screenCapturedImage);
-            } catch(Exception e){
+            } catch(AWTException | HeadlessException e){
                 System.err.println(e.getMessage());
             }
         }
     }
     
-    public void recebeImcremento(){ // Recebe a mensagem de incremento do cliente
+    public void recebeImcremento(){ // Recebe a mensagem de incremento do consumidor
         copiaTerminaConsumir = copiaTerminaConsumir + 1;
     }
     
-    // TODO: fazer o envio
     public void enviaObjeto(BufferedImage screenCapturedImage){ // Envia imagem
         try{
             ByteArrayOutputStream baos;
@@ -81,7 +80,7 @@ public class Servidor implements Runnable{
             out.flush();
             baos.close();
         } catch(Exception e){
-            System.err.println("Erro ao enviar imagem ao cliente");
+            System.err.println("Erro ao enviar imagem ao consumidor");
         }
     }
 }
