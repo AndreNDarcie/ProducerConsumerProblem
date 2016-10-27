@@ -61,6 +61,8 @@ public class Produtor implements Runnable{
             } catch(AWTException | HeadlessException e){
                 System.err.println(e.getMessage());
             }
+        } else {
+            System.out.println("Não foi possível produzir!");
         }
     }
     
