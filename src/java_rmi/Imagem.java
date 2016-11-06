@@ -1,13 +1,26 @@
 package java_rmi;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
-class Imagem implements Serializable{
+public class Imagem implements Serializable{
     
-    Image imagem;
+    private JLabel imagem;
     
-    Imagem(){
-        //
+    public Imagem(){
+        imagem = new JLabel();
     }
+    
+    public void setImagem(ImageIcon imagem){
+        this.imagem.setIcon(imagem);
+    }
+    
+    public JLabel getImagem(){
+        return this.imagem;
+    }
+    
 }

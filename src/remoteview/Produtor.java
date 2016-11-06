@@ -45,7 +45,6 @@ public class Produtor implements Runnable{
                 
                 servidor.close();
                 System.out.println("Produtor finalizado!");
-                
             }catch (Exception e) {
                 System.err.println("Erro no Produtor!");
             }
