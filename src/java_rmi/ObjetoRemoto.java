@@ -11,6 +11,9 @@ public class ObjetoRemoto extends UnicastRemoteObject implements ObjetoRemoto_I{
     }
     
     public Imagem enviarImagem(Imagem img)throws RemoteException{
+        
+        Consumidor.jLabel3.setIcon(img.getImagem());
+        
         return img;
     }
 }
