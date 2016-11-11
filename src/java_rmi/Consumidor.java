@@ -6,6 +6,8 @@
 package java_rmi;
 
 import java.rmi.registry.Registry;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  *
@@ -18,6 +20,9 @@ public class Consumidor extends javax.swing.JFrame {
      */
     
     private static Registry registry;
+    public static final int tamanhoLista = 3;
+    //public static ArrayList<Imagem> listaImagem = new ArrayList<>();
+    public static Queue<Imagem> filaImagem = new LinkedList<Imagem>();
     
     public Consumidor() {
         initComponents();
@@ -37,8 +42,14 @@ public class Consumidor extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Consumidor");
 
         jButton1.setText("Consumir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -65,6 +76,17 @@ public class Consumidor extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        if (!filaImagem.isEmpty()){
+            jLabel3.setIcon(filaImagem.poll().getImagem());
+            System.out.println("Imagem consumida.");
+        } else {
+            System.out.println("Fila vazia, impossivel consumir.");
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -100,12 +122,14 @@ public class Consumidor extends javax.swing.JFrame {
             }
         });
         
+        System.out.println("tamanho: " + filaImagem.size());
+        
         try {
             
             ObjetoRemoto objr = new ObjetoRemoto();
             registry = java.rmi.registry.LocateRegistry.createRegistry(1099);
             registry.bind("servidor_imagens", objr);
-            System.out.println("Conexao efetuada");
+            System.out.println("Consumidor aguardando conexões...");
         } catch (Exception e) {
             
             System.err.println("Cadastro do no no RMIRegistry: "

@@ -8,5 +8,5 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 interface ObjetoRemoto_I extends Remote{
-    Imagem enviarImagem(Imagem i) throws RemoteException;
+    Boolean enviarImagem(Imagem i) throws RemoteException;
 }

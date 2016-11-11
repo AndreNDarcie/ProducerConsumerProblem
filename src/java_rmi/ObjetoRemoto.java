@@ -10,10 +10,14 @@ public class ObjetoRemoto extends UnicastRemoteObject implements ObjetoRemoto_I{
     
     }
     
-    public Imagem enviarImagem(Imagem img)throws RemoteException{
+    public synchronized Boolean enviarImagem(Imagem img)throws RemoteException{
         
-        Consumidor.jLabel3.setIcon(img.getImagem());
-        
-        return img;
+        if (Consumidor.filaImagem.size() < Consumidor.tamanhoLista){
+            Consumidor.filaImagem.add(img);
+        } else {
+            System.out.println("Lista cheia");
+           return false;
+        } 
+        return true;
     }
 }
